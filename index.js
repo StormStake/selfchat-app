@@ -5,6 +5,8 @@ const sendNameBtn = document.getElementById('sendOtherName')
 const dataChannel = peerConnection.createDataChannel(false)
 const loginBtn = document.getElementById("login")
 var targetname = ''
+const msgBtn = document.getElementById("msgBtn")
+const msgBox = document.getElementById("msgBox")
 loginBtn.addEventListener('click', () => {
     makeLogin().then(() => {
         console.log("login succesful maybe...")
@@ -12,14 +14,14 @@ loginBtn.addEventListener('click', () => {
 })
 
 async function makeLogin() {
-    const username = 'a'//document.getElementById("username").value
+    const username = document.getElementById("username").value
     var logindata = JSON.stringify({'type': 'login', 'name': username})
     signalingChannel.send(logindata)
 }
 
 sendNameBtn.addEventListener('click', () =>{
     
-    targetname = 'b'//document.querySelector("#otherperson").value
+    targetname = document.querySelector("#otherperson").value
     makeCall(targetname).then(() =>{
         console.log("test")
     }).catch((e) =>{
@@ -98,9 +100,15 @@ peerConnection.addEventListener("icegatheringstatechange", ev => {
 dataChannel.onopen = sendMsg;
 
 function sendMsg(event) {
-    console.log("HELLOYES")
-    dataChannel.send("HELLOWORLD")
+    
+    msgBtn.addEventListener("click",()=> {
+        dataChannel.send({from:username, text:msgBox.value})
+        msgBox.value = ""
+    })
 }
+
+
+
 
 peerConnection.oniceconnectionstatechange = e => console.log("ice connection "+peerConnection.iceConnectionState);
 

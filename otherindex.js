@@ -1,8 +1,9 @@
 const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
 const signalingChannel = new WebSocket("ws://35.161.208.116:9000")
 const peerConnection = new RTCPeerConnection(configuration);
-
-
+const msgBtn = document.getElementById("msgBtn")
+const msgBox = document.getElementById("msgBox")
+const msgs = document.getElementById("msgs")
 var tarGet = 'un'
 
 
@@ -15,7 +16,7 @@ var tarGet = 'un'
     })
     
     async function makeLogin() {
-        const username = 'b'//document.getElementById("username").value
+        const username = document.getElementById("username").value
         var logindata = JSON.stringify({'type': 'login', 'name': username})
         signalingChannel.send(logindata)
     }
@@ -41,7 +42,7 @@ var tarGet = 'un'
 peerConnection.addEventListener('icecandidate', event => {
     
     if (event.candidate) {
-        signalingChannel.send(JSON.stringify({'type': 'candidate', 'candidate': event.candidate, 'name': 'a'}));
+        signalingChannel.send(JSON.stringify({'type': 'candidate', 'candidate': event.candidate, 'name': tarGet}));
     }
 });
 
@@ -73,6 +74,10 @@ function ondata(event) {
     var chan = event.channel;
     chan.onopen = e => {
         chan.send("test")
+        msgBtn.addEventListener("click", () => {
+            chan.send(msgBox.value)
+            
+        })
     }
     chan.onmessage = print;
 
@@ -81,7 +86,9 @@ function ondata(event) {
 
 
 function print(event) {
-    console.log("FROM:A:"+event.data)
+    var textnode = document.createElement('p')
+    textnode.innerHTML = `From:${event.data.name}>`+event.data.text
+    msgs.appendChild(textnode)
 }
 
 

@@ -1,0 +1,7 @@
+#msgs {
+    overflow-y: auto;
+    height: 400px;
+    width: 20%;
+    background-color: gray;
+    resize: both;
+}

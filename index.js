@@ -101,9 +101,6 @@ function onMessageAddtoMsgs(event) {
 
 ////////////////////////////////////////////////////////////////
 
-
-
-
 //called if receiving
 signalingChannel.addEventListener('message', async message => {
     message = JSON.parse(message.data)
@@ -187,5 +184,37 @@ async function makeCall(target) {
 
 }
 
+//dealing with the userlist
+signalingChannel.addEventListener('message', event => {
+    var message = JSON.parse(event.data);
+    if(message.users) {
+        message.users.forEach(userObj =>{
+            console.log("user "+userObj.userName+" is connected")
+            addUser(userObj.userName)
+        })
 
+    } else if(message.user) {
+        if(message.type === "leave") {
+            console.log("user "+message.user.userName)
+            removeUser(message.user.userName)
+        } else if (message.type === "updateUsers") {
+            console.log("user "+message.user.userName)
+            addUser(message.user.userName)
+        }
+    }
+})
 
+function removeUser(name){
+    
+    var userli = document.getElementById(name)
+    console.log('triyed'+userli)
+    userli.remove()
+}
+
+function addUser(name) {
+    var userlist = document.getElementById("userlist");
+    var node = document.createElement("li");
+    node.innerHTML = name
+    node.id = name
+    userlist.appendChild(node)
+}

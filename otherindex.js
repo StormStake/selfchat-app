@@ -76,11 +76,9 @@ function ondata(event) {
         chan.send("test")
         msgBtn.addEventListener("click", () => {
             chan.send(msgBox.value)
-            
         })
     }
     chan.onmessage = print;
-
 }
 
 

@@ -1,5 +1,5 @@
 const signalingChannel = new WebSocket("ws://35.161.208.116:9000")
-const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}, {urls: 'turn:35.161.208.116:3478', credential: "name2", username: "user2"}]}
 const peerConnection = new RTCPeerConnection(configuration);
 const userNameBtn = document.getElementById('otherperson')
 var dataChannel = undefined
